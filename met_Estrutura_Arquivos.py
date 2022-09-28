@@ -25,22 +25,27 @@ class Jogo:
         self.tam = tam
         self.prod = prod
 
-arq = open('games.txt', 'a')
+arq = open('games.txt', 'r')
 
 jogos = arq.readlines()
+tam = jogos
 
-itens = jogos[0].split('|')
-Lista_Jogo = Jogo(itens[0], itens[1], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7], itens[8])
-arq.writelines()
-print(Lista_Jogo.titulo)
-print(Lista_Jogo.genero)
-print(Lista_Jogo.plataforma)
-print(Lista_Jogo.ano)
-print(Lista_Jogo.classificacao)
-print(Lista_Jogo.preco)
-print(Lista_Jogo.midia)
-print(Lista_Jogo.tam)
-print(Lista_Jogo.prod)
+arq.close()
+
+arq = open('saida_Teste.txt', 'a')
+
+for cont_Aux in range(0, tam):
+    itens = jogos[cont_Aux].split('|')
+    Lista_Jogo = Jogo(itens[0], itens[1], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7], itens[8])
+    arq.write('{:50}|'.format(Lista_Jogo.titulo))
+    arq.write('{:25}|'.format(Lista_Jogo.genero))
+    arq.write('{:15}|'.format(Lista_Jogo.plataforma))
+    arq.write('{:4}|'.format(Lista_Jogo.ano))
+    arq.write('{:12}|'.format(Lista_Jogo.classificacao))
+    arq.write(Lista_Jogo.preco)
+    arq.write(Lista_Jogo.midia)
+    arq.write(Lista_Jogo.tam)
+    arq.write(Lista_Jogo.prod)
 
 arq.close()
 
