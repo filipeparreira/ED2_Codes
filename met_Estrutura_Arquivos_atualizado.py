@@ -24,39 +24,65 @@ class Jogo:
         self.preco = preco
         self.midia = midia
         self.tam = tam
-        
 
-arq = open('games.txt', 'r')
+def grep(nome_arq, palavra_busca):
 
-jogos = arq.readlines()
+    arq_out = open(nome_arq, 'r')
+    jogos = arq_out.readlines()
+    print(jogos)
+    #Palavra a ser buscada
+    palavra_busca = str(palavra_busca).strip().upper() 
+
+    #Auxiliar de busca, onde ele armazena o indice em que a palavra esta, o ideal é retornar o indice da linha onde a palavra está 
+    aux_indice = []
+
+    #Encontrar o \n e pular para linha de baixo retornar o indice da linha
+    aux_count = 0
+    while aux_count < len(jogos):
+        itens = jogos[aux_count].split('|')
+        for aux_count1 in range(0, len(itens)):
+            item = itens[aux_count1].upper().strip()
+            if palavra_busca == item:
+                aux_indice.append(aux_count)
+        aux_count += 1
+    arq_out.close()
+    return (aux_indice)
+
+
+arq_in = open('games2.txt', 'r')
+
+jogos = arq_in.readlines()
 tam = len(jogos)
 
 
-arq.close()
 
-arq = open('saida_Teste.txt', 'a')
+arq_in.close()
+
+arq_out = open('saida_Teste_Games.txt', 'w+')
 
 
 for cont_Aux in range(0, tam):
     itens = jogos[cont_Aux].split('|')
     Lista_Jogo = Jogo(itens[0], itens[1], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7], itens[8])
-    arq.write('{:50}|'.format(Lista_Jogo.titulo))
-    arq.write('{:40}|'.format(Lista_Jogo.prod))
-    arq.write('{:25}|'.format(Lista_Jogo.genero))
-    arq.write('{:15}|'.format(Lista_Jogo.plataforma))
-    arq.write('{:4}|'.format(Lista_Jogo.ano))
-    arq.write('{:12}|'.format(Lista_Jogo.classificacao))
-    arq.write('{:7}|'.format(Lista_Jogo.preco))
-    arq.write('{:8}|'.format(Lista_Jogo.midia))
-    arq.write('{}'.format(Lista_Jogo.tam))
-    
+    arq_out.write('{:50}|'.format(Lista_Jogo.titulo))
+    arq_out.write('{:40}|'.format(Lista_Jogo.prod))
+    arq_out.write('{:25}|'.format(Lista_Jogo.genero))
+    arq_out.write('{:15}|'.format(Lista_Jogo.plataforma))
+    arq_out.write('{:4}|'.format(Lista_Jogo.ano))
+    arq_out.write('{:12}|'.format(Lista_Jogo.classificacao))
+    arq_out.write('{:7}|'.format(Lista_Jogo.preco))
+    arq_out.write('{:8}|'.format(Lista_Jogo.midia))
+    arq_out.write('{}'.format(Lista_Jogo.tam))
 
-itens = jogos[0].split('|')
-Lista_Jogo = Jogo(itens[0], itens[1], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7], itens[8])
+palavra_busca = str(input('Digite a palavra a ser buscada no arquivo: '))
 
+nome_arq = 'games2.txt'
 
+indices = grep(nome_arq, palavra_busca)
 
-arq.close()
+print(indices)
+
+arq_out.close()
 
 
 
