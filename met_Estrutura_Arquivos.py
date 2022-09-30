@@ -9,6 +9,9 @@
     #Tamanho: 7 caracteres
     #Produtora: 40 caracteres 
 
+from asyncore import write
+
+
 class Jogo:
     jogo = 'Jogo'
 
@@ -25,29 +28,33 @@ class Jogo:
         self.tam = tam
         self.prod = prod
 
-arq = open('games.txt', 'r')
+#Leitura do arquivo 
+arq_Jogos = open('games.txt', 'r+')
 
-jogos = arq.readlines()
-tam = jogos
+jogos = arq_Jogos.readlines()
 
-arq.close()
+arq_Jogos.close()
 
-arq = open('saida_Teste.txt', 'a')
+arq_Jogos = open('saida.txt', 'a')
 
-for cont_Aux in range(0, tam):
+tam = len(jogos)
+
+for cont_Aux in range(0, tam):    
     itens = jogos[cont_Aux].split('|')
     Lista_Jogo = Jogo(itens[0], itens[1], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7], itens[8])
-    arq.write('{:50}|'.format(Lista_Jogo.titulo))
-    arq.write('{:25}|'.format(Lista_Jogo.genero))
-    arq.write('{:15}|'.format(Lista_Jogo.plataforma))
-    arq.write('{:4}|'.format(Lista_Jogo.ano))
-    arq.write('{:12}|'.format(Lista_Jogo.classificacao))
-    arq.write(Lista_Jogo.preco)
-    arq.write(Lista_Jogo.midia)
-    arq.write(Lista_Jogo.tam)
-    arq.write(Lista_Jogo.prod)
+    arq_Jogos.write(Lista_Jogo.titulo)
+    arq_Jogos.write(Lista_Jogo.genero)
+    arq_Jogos.write(Lista_Jogo.plataforma)
+    arq_Jogos.write(Lista_Jogo.ano)
+    arq_Jogos.write(Lista_Jogo.classificacao)
+    arq_Jogos.write(Lista_Jogo.preco)
+    arq_Jogos.write(Lista_Jogo.midia)
+    arq_Jogos.write(Lista_Jogo.tam)
+    arq_Jogos.write(Lista_Jogo.prod)
 
-arq.close()
+
+
+arq_Jogos.close()
 
 
 
