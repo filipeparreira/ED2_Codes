@@ -42,8 +42,13 @@ def imprimir_gen_key(nome_arq, tam):
         arq_jogos.write('{:7}|'.format(str(Lista_Jogo.preco)))
         arq_jogos.write('{:8}|'.format(str(Lista_Jogo.midia)))
         arq_jogos.write('{}'.format(str(Lista_Jogo.tam)))
+        
         nome = str(Lista_Jogo.titulo).upper().replace(' ', '')
         ano = str(Lista_Jogo.ano).replace(' ', '')
+        
+        #ch = chaveCanonica(...)
+        #append(ch)
+
         key_list.append(nome + ano)
         count_aux += 1
     arq_jogos.close()
@@ -78,23 +83,30 @@ def grep_v2(arq_saida, palavra_busca):
 
     arquivo.close()
 
+def chaveCanonica(linha_registro):
+    # pegar o nome, ano
+    # chave = nome + ano
+    # remover espaçco em branco
+    # upper case
+    # return chave
 
+if __name__ == "__main__":
 
-arq_Jogos = open('gamesv2.txt', 'r')
-jogos = arq_Jogos.readlines()
-arq_Jogos.close()
+    arq_Jogos = open('gamesv2.txt', 'r')
+    jogos = arq_Jogos.readlines()
+    arq_Jogos.close()
 
-tam = len(jogos)
-arquivo_saida = str(input('Digite o nome do arquivo de saída: ')).strip()
-arquivo_saida = arquivo_saida + '.txt'
+    tam = len(jogos)
+    arquivo_saida = str(input('Digite o nome do arquivo de saída: ')).strip()
+    arquivo_saida = arquivo_saida + '.txt'
 
-key_list = imprimir_gen_key(arquivo_saida, tam)
+    key_list = imprimir_gen_key(arquivo_saida, tam)
 
-palavra_busca  = str(input('Digite uma palavra para ser buscada no arquivo: ')).strip().upper()
-grep_list = grep_v1(arquivo_saida, palavra_busca)
-print('As linhas em que a palavra/numero {} se encontra são: {}'.format(palavra_busca ,grep_list))
+    palavra_busca  = str(input('Digite uma palavra para ser buscada no arquivo: ')).strip().upper()
+    grep_list = grep_v1(arquivo_saida, palavra_busca)
+    print('As linhas em que a palavra/numero {} se encontra são: {}'.format(palavra_busca ,grep_list))
 
-grep_v2(arquivo_saida, palavra_busca)
+    grep_v2(arquivo_saida, palavra_busca)
 
 
 
