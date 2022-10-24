@@ -18,6 +18,8 @@ def ord(arquivo):
     tam = len(linhas)
     arquivo.close()
 
+    elementos = {'key' : None, 'nome' : None, 'sobrenome' : None, 'nome_hero' : None, 'poder' : None, 'fraqueza' : None, 'local' : None, 'prof' : None}
+
 
 
 
