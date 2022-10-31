@@ -97,7 +97,6 @@ if __name__ == "__main__":
     imprime(lista_herois_ord, arquivo_ord)
 
     key_busca = str(input('Digite o nome e sobrenome do heroi que deseja buscar: ')).replace(' ', '').upper().strip()
-    print(key_busca)
     res = busca_binaria(arquivo_ord, key_busca)
 
     if res == True:
