@@ -1,6 +1,3 @@
-from random import randrange
-
-
 def armazena(heroi, lista_herois, tam):
     count = 0
     while count < tam:
@@ -40,7 +37,7 @@ def imprime(lista_herois, lista_herois_ord, arquivo):
         arquivo.write('{}|'.format(lista_herois[count]['poder']))
         arquivo.write('{}|'.format(lista_herois[count]['fraqueza']))
         arquivo.write('{}|'.format(lista_herois[count]['local']))
-        arquivo.write('{}|'.format(lista_herois[count]['profissao']))
+        arquivo.write('{}'.format(lista_herois[count]['profissao']))
 
     arquivo.write('Lista Herois ordenada:\n\n')
     for count in range(0, len(lista_herois_ord)):
@@ -50,7 +47,7 @@ def imprime(lista_herois, lista_herois_ord, arquivo):
         arquivo.write('{}|'.format(lista_herois_ord[count]['poder']))
         arquivo.write('{}|'.format(lista_herois_ord[count]['fraqueza']))
         arquivo.write('{}|'.format(lista_herois_ord[count]['local']))
-        arquivo.write('{}|'.format(lista_herois_ord[count]['profissao']))
+        arquivo.write('{}'.format(lista_herois_ord[count]['profissao']))
     
     arquivo.close()
         
@@ -69,6 +66,4 @@ gera_key(lista_herois)
 
 lista_herois_ord = sorted(lista_herois, key=lambda row:row['key'])
 
-print(lista_herois_ord[0]['nome'])
-
-imprime(lista_herois, lista_herois_ord, 'saida.txt')
+imprime(lista_herois, lista_herois_ord, 'saida_teste_ord.txt')
