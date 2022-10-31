@@ -1,6 +1,41 @@
-def armazena(heroi, lista_herois, tam):
+def busca_binaria(arquivo_ord, key_busca):
+    arquivo = open(arquivo_ord, 'r')
+    linhas = arquivo.readlines()
+    arquivo.close()
+
+    inicio = 0
+    fim = len(linhas) - 1
+
+    registros = armazena(arquivo_ord)
+    gera_key(registros)
+
+    while inicio <= fim:
+        meio = int((inicio + fim) / 2)
+        reg = registros[meio]
+        
+        if reg['key'] == key_busca:
+            return True
+        if reg['key'] > key_busca:
+            fim = meio - 1
+        else: 
+            inicio = meio + 1 
+        
+    return False
+    
+
+#É uma função que vai receber um arquivo e retornar
+#uma lista com todos os registros do arquivo
+def armazena(arquivo_in):
+    arquivo = open(arquivo_in, 'r')
+    linhas = arquivo.readlines()
+    arquivo.close()
+
+    heroi = {}
+    lista_herois = []
+
     count = 0
-    while count < tam:
+    
+    while count < len(linhas):
         conteudo = linhas[count].split('|')
         if len(conteudo) == 7:        
             heroi['nome'] = conteudo[0]
@@ -17,6 +52,9 @@ def armazena(heroi, lista_herois, tam):
             count += 1
         else:
             count += 1
+    
+    return lista_herois
+
 
 def gera_key(lista_herois):
     
@@ -43,24 +81,28 @@ def imprime(lista_herois_ord, arquivo):
     arquivo.close()
         
 if __name__ == "__main__":
-    #Manipulação do arquivo
-    arq_in = open('heroi.txt', 'r')
-    linhas = arq_in.readlines()
-    arq_in.close()
-    
-    tam = len(linhas)
-
-    #Declarando o dicionario e uma lista(que vai se tornar uma lista de dicionarios)
-    heroi = {}
-    lista_herois = []
+    #Definindo os arquivos
+    arq_in = 'heroi.txt'
+    arquivo_ord = 'herois_ord.txt'
 
     #Chamando as funções para armazenar as informações do arquivo de entrada 
     #e a que armazena  na lista a chave canonica de cada item do arquivo de entrada
-    armazena(heroi, lista_herois, tam)
+    lista_herois = armazena(arq_in)
     gera_key(lista_herois)
 
     #Ordenando a lista de dicionarios em forma decrescente, atraves da chave canonica
     lista_herois_ord = sorted(lista_herois, key=lambda row:row['key'])
 
     #Imprime a lista ordenada em um outro arquivp
-    imprime(lista_herois_ord, 'saida_teste_ord1.txt')
+    imprime(lista_herois_ord, arquivo_ord)
+
+    key_busca = str(input('Digite o nome e sobrenome do heroi que deseja buscar: ')).replace(' ', '').upper().strip()
+    print(key_busca)
+    res = busca_binaria(arquivo_ord, key_busca)
+
+    if res == True:
+        print('O heroi buscado foi encontrado!!!')
+    else:
+        print('O heroi buscado não existe nos registros :(')
+        
+    
