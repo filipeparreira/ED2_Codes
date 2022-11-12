@@ -1,7 +1,11 @@
+from sorting_techniques import pysort
 
+#Função que lê as informações do arquivo de entrada,
+#armazena as necessaria em variaveis e as  retorna
 def armazena(arquivo_in):
     arquivo = open(arquivo_in, 'r')
     linhas = arquivo.readlines()
+    linha1 = linhas[0]
     
     #Armazenando as informações do cabeçalho
     cabecalho = linhas[0].split('=')
@@ -12,11 +16,11 @@ def armazena(arquivo_in):
 
     #Tipo de ordenação
     cabecalho_aux = cabecalho[4].split(' ')
-    tipo_ord = cabecalho_aux[0]
+    tipo_ord = cabecalho_aux[0].upper().strip()
 
     #Ordem da ordenação
     cabecalho_aux = cabecalho[5].split(' ')
-    ordem = cabecalho_aux[0]
+    ordem = cabecalho_aux[0].strip().upper()
 
     #Armazendando as keys
     count = 1
@@ -29,15 +33,45 @@ def armazena(arquivo_in):
 
     arquivo.close()
 
-    return qntd, tipo_ord, ordem, keys
+    return qntd, tipo_ord, ordem, keys, linha1
 
+#Função que identifica que tipo de ordenação é para ser feita
+#e retorna o vetor de chaves já ordenado
+def ordena(keys, tipo_ord, ordem):
+    ordena = pysort.Sorting()
+
+    if tipo_ord == 'Q':
+        keys = ordena.quickSort(keys, 0, len(keys) - 1)
+        if ordem == 'D':
+            keys = list(reversed(keys))            
+        return keys
+    
+    elif tipo_ord == 'H':
+        keys = ordena.heapSort(keys)
+        if ordem == 'D':
+            keys = list(reversed(keys))            
+        return keys
+    
+    elif tipo_ord == 'M':
+        keys = ordena.mergeSort(keys)
+        if ordem == 'D':
+            keys = list(reversed(keys))            
+        return keys
+    
+    elif tipo_ord == 'I':
+        keys = ordena.insertionSort(keys)
+        if ordem == 'D':
+            keys = list(reversed(keys))            
+        return keys
 
 if __name__ == '__main__':
     #Recebendo o arquivo:
     arquivo_in = 'input1.txt'
     arquivo_saida = 'saida_teste1.txt'
     
-    #Armazena quantidade, tipo_ord, ordem, keys
-    quantidade, tipo_ord, ordem, keys = armazena(arquivo_in)
-
+    #Armazena quantidade, tipo_ord, ordem, keys, e a primeira linha
+    quantidade, tipo_ord, ordem, keys, linha1 = armazena(arquivo_in)
+    keys = ordena(keys, tipo_ord)
+    
+    
     
