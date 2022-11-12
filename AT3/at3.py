@@ -64,14 +64,39 @@ def ordena(keys, tipo_ord, ordem):
             keys = list(reversed(keys))            
         return keys
 
+#Vai receber o arquivo de saida, o texto do arquivo de entrada
+#e a lista de chaves já ordenadas, e vai imprimir os registros, 
+#já ordenados, no arquivo de saída
+def imprime(arquivo_saida, texto, keys, linha1):
+    arquivo = open(arquivo_saida, 'w')
+    arquivo.write(linha1)
+    for count in range(0, len(keys)):
+        busca = texto.find(keys[count])
+        if busca != -1:
+            busca_aux = texto.find('\n', busca)
+            arquivo.write(f'{texto[busca:busca_aux]}\n')
+        
+    arquivo.close()
+
+
 if __name__ == '__main__':
     #Recebendo o arquivo:
     arquivo_in = 'input1.txt'
     arquivo_saida = 'saida_teste1.txt'
     
+    
+
     #Armazena quantidade, tipo_ord, ordem, keys, e a primeira linha
     quantidade, tipo_ord, ordem, keys, linha1 = armazena(arquivo_in)
-    keys = ordena(keys, tipo_ord)
     
+    #Ordena a lista de chaves
+    keys = ordena(keys, tipo_ord, ordem)
     
+    #Armazena o texto do arquivo de entrada em uma variável
+    # e chama a função que imprime no arquivo de saída
+    arquivo = open(arquivo_in, 'r')
+    texto = arquivo.read()
+    arquivo.close()
+    print(keys)
+    imprime(arquivo_saida, texto, keys, linha1)
     

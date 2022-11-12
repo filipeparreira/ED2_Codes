@@ -1,4 +1,4 @@
-from sorting_techniques import pysort
+'''from sorting_techniques import pysort
 
 #Criação do objeto que representa o pysort
 object_sort = pysort.Sorting()
@@ -24,4 +24,9 @@ print(merge)
 heap = object_sort.heapSort(arr.copy())
 print(heap)
 insertion = object_sort.insertionSort(arr.copy())
-print(insertion)
+print(insertion)'''
+
+palavra = 'Filipe augusto parreira almeida\nfilipeoioi'
+
+busca = palavra.find('au')
+print(palavra[busca:30])
