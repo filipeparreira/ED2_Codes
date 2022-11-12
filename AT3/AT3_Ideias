@@ -1,0 +1,8 @@
+Função do código:
+- Implementar um algoritmo que realize o keysorting dos registros de herói e gravar o resultado da operação em um novo arquivo.
+
+Objetivos da implementação: 
+- Recebe dois arquivos, um de entrada e outro de saída.
+- No cabeçalho, por hora, será necessario somente ler as informações de SORT e ORDER(Talvez a QTDE também).
+- Tentar manipular as informações do arquivo sem precisar de ficar percorrendo-o
+
