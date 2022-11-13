@@ -1,4 +1,12 @@
 from sorting_techniques import pysort
+from sys import argv
+
+'''
+Possiveis erros:
+- Arquivo de entrada vazio
+- Informações do cabeçalho incorretas 
+- Key com mais de 3 dígitos
+'''
 
 #Função que lê as informações do arquivo de entrada,
 #armazena as necessaria em variaveis e as  retorna
@@ -29,6 +37,7 @@ def armazena(arquivo_in):
     while count < len(linhas):
         conteudo = linhas[count].split('|')
         keys.append(conteudo[0])
+        print(len(conteudo[0]))
         count += 1
 
     arquivo.close()
@@ -75,20 +84,49 @@ def imprime(arquivo_saida, texto, keys, linha1):
         if busca != -1:
             busca_aux = texto.find('\n', busca)
             arquivo.write(f'{texto[busca:busca_aux]}\n')
+    arquivo.close()
+
+#Função que adiciona uma linha na ultima posição do arquivo,
+#para que possa auxiliar na função imprime que identifica os
+#registros atráves do '\n', sendo que por padrão os arquivos
+#não vem com '\n' no final
+def adiciona_linha(arquivo_in):
+    arquivo = open(arquivo_in, 'a')
+    arquivo.write('\n')
+    arquivo.close()
+
+#Apaga a ultima linha que contém o \n para que a quantidade
+#de '\n's não se acumule com a execução do código
+def apaga_linha(arquivo_in):
+    arquivo = open(arquivo_in, 'r')
+    linhas = arquivo.readlines()
+    arquivo.close()
+    
+    arquivo = open(arquivo_in, 'w')
+    for linha in linhas:
+        if linha !=  '\n':
+            arquivo.write(linha)
         
     arquivo.close()
 
 
 if __name__ == '__main__':
+    if len(argv) != 3:
+        print('Quantidade de argumentos inválidos!!')
+        print('Insira 3 argumentos: [nome do programa] [arquivo de entrada] [arquivo de saida]')
+        exit()
+
+
     #Recebendo o arquivo:
-    arquivo_in = 'input1.txt'
-    arquivo_saida = 'saida_teste1.txt'
+    arquivo_in = argv[1]
+    arquivo_saida = argv[2]
     
-    
+    #Chama a função que adiciona '\n' no final do arquivo
+    adiciona_linha(arquivo_in)
 
     #Armazena quantidade, tipo_ord, ordem, keys, e a primeira linha
-    quantidade, tipo_ord, ordem, keys, linha1 = armazena(arquivo_in)
-    
+    quantidade, tipo_ord, ordem, keys, linha1 = armazena(arquivo_in)    
+
     #Ordena a lista de chaves
     keys = ordena(keys, tipo_ord, ordem)
     
@@ -97,6 +135,10 @@ if __name__ == '__main__':
     arquivo = open(arquivo_in, 'r')
     texto = arquivo.read()
     arquivo.close()
-    print(keys)
+
+    apaga_linha(arquivo_in)
+
     imprime(arquivo_saida, texto, keys, linha1)
+    
+    apaga_linha(arquivo_saida)
     

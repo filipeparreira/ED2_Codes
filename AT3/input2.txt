@@ -1,4 +1,4 @@
-SIZE=136 TOP=-1 QTDE=22 SORT=Q ORDER=C
+SIZE=136 TOP=-1 QTDE=22 SORT=M ORDER=D
 12|James|Logan|Wolverine|fator cura|jean gray|Canada|alcoolatra
 37|T'challa|King|Pantera Negra|roupa|sem a roupa|Wakanda|rei
 62|Bruce|Banner|Hulk|forte para caralho|viuva negra|nova york|fisico
