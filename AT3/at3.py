@@ -1,9 +1,10 @@
+#Bibliotecas 
 from sorting_techniques import pysort
 from sys import argv
 
 '''
 Possiveis erros:
-- Arquivo de entrada vazio
+- Arquivo de entrada vazio (resolvido)
 - Informações do cabeçalho incorretas 
 - Key com mais de 3 dígitos
 '''
@@ -109,7 +110,21 @@ def apaga_linha(arquivo_in):
         
     arquivo.close()
 
+#Função que verifica se o arquivo de entrada está vazio 
+def verifica_vazio(arquivo_in, linhas, tam):
+    arq = open(arquivo_in, 'w')
 
+    if tam == 0:
+        arq.write('Arquivo de entrada vazio!!!')
+        arq.close()
+        exit()
+    elif linhas[0] == '\n' or linhas[1] == '\n':
+        arq.write('Arquivo de entrada vazio!!!')
+        arq.close()
+        exit()
+
+
+#Main 
 if __name__ == '__main__':
     if len(argv) != 3:
         print('Quantidade de argumentos inválidos!!')
