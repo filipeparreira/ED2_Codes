@@ -111,31 +111,38 @@ def apaga_linha(arquivo_in):
     arquivo.close()
 
 #Função que verifica se o arquivo de entrada está vazio 
-def verifica_vazio(arquivo_in, linhas, tam):
-    arq = open(arquivo_in, 'w')
+def verifica_vazio(arquivo_in, arquivo_out):
+    arq = open(arquivo_in, 'r')
+    linhas = arq.readlines()
+    arq.close()
+    tam = len(linhas)
+    arq = open(arquivo_out, 'w')
 
-    if tam == 0:
-        arq.write('Arquivo de entrada vazio!!!')
+    if tam == 0 or tam == 1:
+        arq.write('Arquivo inválido!!!')
         arq.close()
         exit()
     elif linhas[0] == '\n' or linhas[1] == '\n':
-        arq.write('Arquivo de entrada vazio!!!')
+        arq.write('Arquivo inválido!!!')
         arq.close()
         exit()
 
 
 #Main 
 if __name__ == '__main__':
+    #Verificando a quantidade de argumentos
     if len(argv) != 3:
         print('Quantidade de argumentos inválidos!!')
         print('Insira 3 argumentos: [nome do programa] [arquivo de entrada] [arquivo de saida]')
         exit()
-
-
+    
     #Recebendo o arquivo:
     arquivo_in = argv[1]
     arquivo_saida = argv[2]
     
+    #Verificando se o arquivo de entrada está vazio
+    verifica_vazio(arquivo_in, arquivo_saida)
+
     #Chama a função que adiciona '\n' no final do arquivo
     adiciona_linha(arquivo_in)
 
