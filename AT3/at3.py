@@ -5,23 +5,20 @@ from sys import argv
 '''
 Possiveis erros:
 - Arquivo de entrada vazio (resolvido)
-- Informações do cabeçalho incorretas 
-- Key com mais de 3 dígitos
+- Informações do cabeçalho incorretas (resolvido)
+- Key com mais de 3 dígitos (resolvido)
 '''
 
 #Função que lê as informações do arquivo de entrada,
 #armazena as necessaria em variaveis e as  retorna
 def armazena(arquivo_in):
+    #Manipulação de arquivo
     arquivo = open(arquivo_in, 'r')
     linhas = arquivo.readlines()
     linha1 = linhas[0]
     
     #Armazenando as informações do cabeçalho
     cabecalho = linhas[0].split('=')
-    
-    #Quantidade
-    cabecalho_aux = cabecalho[3].split(' ')
-    qntd = int(cabecalho_aux[0])
 
     #Tipo de ordenação
     cabecalho_aux = cabecalho[4].split(' ')
@@ -35,28 +32,40 @@ def armazena(arquivo_in):
     count = 1
     keys = []
     
+    #Verifica se o formato do registro esta correto (com 8 separadores)
+    #e verifica se a chave tem até 3 digitos, caso um desses requisitos
+    #seja falso ele descosidera o registro incorreto
     while count < len(linhas):
         conteudo = linhas[count].split('|')
-        keys.append(conteudo[0])
-        count += 1
+        if len(conteudo[0]) > 3:
+            count += 1
+        elif len(conteudo) == 8:
+            keys.append(conteudo[0])
+            count += 1
+        else: 
+            count += 1
 
     arquivo.close()
 
-    return qntd, tipo_ord, ordem, keys, linha1
+    return tipo_ord, ordem, keys, linha1
 
 #Função que identifica que tipo de ordenação é para ser feita
 #e retorna o vetor de chaves já ordenado
 def ordena(keys, tipo_ord, ordem):
     ordena = pysort.Sorting()
     
-    #Transformando os itens da lista em inteiros
+    #Transformando a lista de chaves em valores inteiros 
+    #para que possa ser ordenado de forma correta
     for count in range(0, len(keys)):
         if keys[count] == '\n':
             del(keys[count])
-    
     for count in range(0, len(keys)):
         keys[count] = int(keys[count])
 
+    #A partir daqui ele verifica o tipo de algoritmo de 
+    # ordenação que está descrito no arquivo e também a
+    # ordem em que as informações tem que ser organizadas,
+    # caso seja de forma decrescente, inverte-se a lista de chaves 
     if tipo_ord == 'Q':
         keys = ordena.quickSort(keys, 0, len(keys) - 1)
         if ordem == 'D':
@@ -88,7 +97,9 @@ def imprime(arquivo_saida, texto, keys, linha1):
     arquivo = open(arquivo_saida, 'w')
     arquivo.write(linha1)
     
-    #Transformando para str
+    #Transformando os itens da lista de chaves para string
+    # para utiliza-la no comando find(), a lista de chaves
+    # neste ponto já esta ordenada
     for count in range(0, len(keys)):
             keys[count] = str(keys[count])
 
@@ -97,16 +108,21 @@ def imprime(arquivo_saida, texto, keys, linha1):
         #Identifica onde a linha da chave buscada começa
         busca = texto.find(keys[count])
         if busca != -1:
+            #Como o comando find() busca em string, pode ocorrer
+            # de uma chave ser parte de outra, logo o algoritmo
+            # imprime o registro errado no arquivo resultante
+            # sendo assim, ele identifica a chave inteira e compara
+            # com a chave da lista, caso seja a mesma, ele imprime
+            # caso contrario ele 
             busca_aux = texto.find('|', busca)
             key_aux = texto[busca:busca_aux]
-            if key_aux == keys[count]:
-                #Identifica o final da linha
-                busca_aux = texto.find('\n', busca)
-                arquivo.write(f'{texto[busca:busca_aux]}\n')
-            elif key_aux != keys[count]:
+            while key_aux != keys[count]:
                 busca = texto.find(keys[count], busca_aux)
-                busca_aux = texto.find('\n', busca)
-                arquivo.write(f'{texto[busca:busca_aux]}\n')
+                busca_aux = texto.find('|', busca)
+                key_aux = texto[busca:busca_aux]
+            #Identifica o final da linha
+            busca_aux = texto.find('\n', busca)
+            arquivo.write(f'{texto[busca:busca_aux]}\n')
                 
     arquivo.close()
 
@@ -133,6 +149,7 @@ def apaga_linha(arquivo_in):
         
     arquivo.close()
 
+#Função que verifica as informações do cabeçalho
 def verifica_infos(ordem, tipo_ord, arq_out):
     arq = open(arq_out, 'w')
     if ordem != 'D' and ordem != 'C':
@@ -181,7 +198,7 @@ if __name__ == '__main__':
     adiciona_linha(arquivo_in)
 
     #Armazena quantidade, tipo_ord, ordem, keys, e a primeira linha
-    quantidade, tipo_ord, ordem, keys, linha1 = armazena(arquivo_in)    
+    tipo_ord, ordem, keys, linha1 = armazena(arquivo_in)    
 
     #Verifica as informações do cabeçalho
     verifica_infos(ordem, tipo_ord, arquivo_saida)
