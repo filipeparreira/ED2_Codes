@@ -48,6 +48,14 @@ def armazena(arquivo_in):
 #e retorna o vetor de chaves já ordenado
 def ordena(keys, tipo_ord, ordem):
     ordena = pysort.Sorting()
+    
+    #Transformando os itens da lista em inteiros
+    for count in range(0, len(keys)):
+        if keys[count] == '\n':
+            del(keys[count])
+    
+    for count in range(0, len(keys)):
+        keys[count] = int(keys[count])
 
     if tipo_ord == 'Q':
         keys = ordena.quickSort(keys, 0, len(keys) - 1)
@@ -79,11 +87,27 @@ def ordena(keys, tipo_ord, ordem):
 def imprime(arquivo_saida, texto, keys, linha1):
     arquivo = open(arquivo_saida, 'w')
     arquivo.write(linha1)
+    
+    #Transformando para str
     for count in range(0, len(keys)):
+            keys[count] = str(keys[count])
+
+    #Começo do laço que imprime no arquivo de saída
+    for count in range(0, len(keys)):
+        #Identifica onde a linha da chave buscada começa
         busca = texto.find(keys[count])
         if busca != -1:
-            busca_aux = texto.find('\n', busca)
-            arquivo.write(f'{texto[busca:busca_aux]}\n')
+            busca_aux = texto.find('|', busca)
+            key_aux = texto[busca:busca_aux]
+            if key_aux == keys[count]:
+                #Identifica o final da linha
+                busca_aux = texto.find('\n', busca)
+                arquivo.write(f'{texto[busca:busca_aux]}\n')
+            elif key_aux != keys[count]:
+                busca = texto.find(keys[count], busca_aux)
+                busca_aux = texto.find('\n', busca)
+                arquivo.write(f'{texto[busca:busca_aux]}\n')
+                
     arquivo.close()
 
 #Função que adiciona uma linha na ultima posição do arquivo,
@@ -167,9 +191,11 @@ if __name__ == '__main__':
     
     #Armazena o texto do arquivo de entrada em uma variável
     # e chama a função que imprime no arquivo de saída
-    arquivo = open(arquivo_in, 'r')
-    texto = arquivo.read()
-    arquivo.close()
+    arq = open(arquivo_in, 'r')
+    texto = arq.readlines()
+    arq.close()
+    texto = texto[1:]
+    texto = ''.join(texto)
 
     apaga_linha(arquivo_in)
 

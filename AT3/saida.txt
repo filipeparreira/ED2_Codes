@@ -1,6 +1,6 @@
 SIZE=136 TOP=-1 QTDE=22 SORT=Q ORDER=C
-05|Virgil|Hawkins|Super Choque|choque|borracha|Dakota|estudante
-07|Lava|Girl|Lava Girl|Lava|Agua|Vulcao|bombeira
+5|Virgil|Hawkins|Super Choque|choque|borracha|Dakota|estudante
+7|T'challa|King|Pantera Negra|roupa|sem a roupa|Wakanda|rei
 12|James|Logan|Wolverine|fator cura|jean gray|Canada|alcoolatra
 14|Bros|Mario|Super Mario|cogumelo|princesa|No cano|encanador
 27|Hal|Jordan|Lanterna Verde|Anel|Lanterna amarelo|Coast City|piloto
@@ -21,3 +21,4 @@ SIZE=136 TOP=-1 QTDE=22 SORT=Q ORDER=C
 81|Wade|Wilson|Deadpool|fator de cura|maluco|Canada|mercenario
 94|Mendigo|Dos Mares|Mendigo do Mares|Mendigo|Riqueza|Mares|Lixeiro
 96|Lloyd|Garmadon|Green Ninja| Verde|Lord Garmadon|Ninjago|Ninja
+128|James|Logan|Wolverine|fator cura|jean gray|Canada|alcoolatra
