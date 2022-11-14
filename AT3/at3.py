@@ -38,7 +38,6 @@ def armazena(arquivo_in):
     while count < len(linhas):
         conteudo = linhas[count].split('|')
         keys.append(conteudo[0])
-        print(len(conteudo[0]))
         count += 1
 
     arquivo.close()
@@ -110,6 +109,17 @@ def apaga_linha(arquivo_in):
         
     arquivo.close()
 
+def verifica_infos(ordem, tipo_ord, arq_out):
+    arq = open(arq_out, 'w')
+    if ordem != 'D' and ordem != 'C':
+        arq.write('Arquivo Inválido!!')
+        arq.close()
+        exit()
+    elif tipo_ord != 'Q' and tipo_ord != 'H' and tipo_ord != 'M' and tipo_ord != 'I':
+        arq.write('Arquivo Inválido!!')
+        arq.close()
+        exit()
+
 #Função que verifica se o arquivo de entrada está vazio 
 def verifica_vazio(arquivo_in, arquivo_out):
     arq = open(arquivo_in, 'r')
@@ -119,11 +129,11 @@ def verifica_vazio(arquivo_in, arquivo_out):
     arq = open(arquivo_out, 'w')
 
     if tam == 0 or tam == 1:
-        arq.write('Arquivo inválido!!!')
+        arq.write('Arquivo Inválido!!')
         arq.close()
         exit()
     elif linhas[0] == '\n' or linhas[1] == '\n':
-        arq.write('Arquivo inválido!!!')
+        arq.write('Arquivo Inválido!!')
         arq.close()
         exit()
 
@@ -148,6 +158,9 @@ if __name__ == '__main__':
 
     #Armazena quantidade, tipo_ord, ordem, keys, e a primeira linha
     quantidade, tipo_ord, ordem, keys, linha1 = armazena(arquivo_in)    
+
+    #Verifica as informações do cabeçalho
+    verifica_infos(ordem, tipo_ord, arquivo_saida)
 
     #Ordena a lista de chaves
     keys = ordena(keys, tipo_ord, ordem)

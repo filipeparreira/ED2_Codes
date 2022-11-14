@@ -1,5 +1,4 @@
 SIZE=136 TOP=-1 QTDE=22 SORT=Q ORDER=C
-
 05|Virgil|Hawkins|Super Choque|choque|borracha|Dakota|estudante
 07|Lava|Girl|Lava Girl|Lava|Agua|Vulcao|bombeira
 12|James|Logan|Wolverine|fator cura|jean gray|Canada|alcoolatra
