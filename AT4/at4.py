@@ -15,6 +15,8 @@
             - Criar, carregar e pesquisar (Tanto no indice primario quanto no indice secundario)
             - E funções auxiliares (Ler_registro_com_RRN, ordenarIndx, criar_RRN)
 '''
+# Bibliotecas 
+from sys import argv
 # Para o funcionamento do indice primario
     # Ler um registro com base no RRN
     # Ordenar o arquivo de indices 
@@ -24,18 +26,20 @@
     # Pesquisar baseado na chave canonica
 
 # Manipulando os dados do arquivo
-    # Abro o arquivo de entrada, leio e armazeno as informações contidas nele
+
+# Abro o arquivo de entrada, leio e armazeno as informações contidas nele
 def armazena(arquivo, dicionario, lista):
     arquivo = open(arquivo, 'r')
     linhas = arquivo.readlines()
-    
+    arquivo.close()
+
     # Guardadando a quantidade de registros no arquivo
     cabecalho = linhas[0].split('QTDE=')
-    cabecalho_aux = cabecalho.split(' ')
-    quantidade = cabecalho_aux[0]
+    cabecalho_aux = cabecalho[1].split(' ')
+    quantidade = int(cabecalho_aux[0])
     
     for count in range(1, len(linhas)):
-        itens = linhas[count].split('|').strip()
+        itens = linhas[count].split('|')
         if len(itens) == 6:
             dicionario['ano'] = itens[0]
             dicionario['duracao'] = itens[1]
@@ -44,16 +48,30 @@ def armazena(arquivo, dicionario, lista):
             dicionario['genero'] = itens[4]
             dicionario['idioma'] = itens[5]
 
-            lista.append(dicionario)
-    
-    return quantidade, dicionario
-    
+            lista.append(dicionario.copy())
+
     # Defino o tamanho dos itens do arquivo
+    for registro in lista:
+        if len(registro['ano']) > 4:
+            registro['ano'] = registro['ano'][:4]
+        if len(registro['duracao']) > 5:
+            registro['duracao'] = registro['duração'][:5]
+        if len(registro['titulo']) > 31:
+            registro['titulo'] = registro['titulo'][:31]
+        if len(registro['artista']) > 21:
+            registro['artista'] = registro['artista'][:21]
+        if len(registro['genero']) > 12:
+            registro['genero'] = registro['genero'][:12]
+        if len(registro['idioma']) > 12:
+            registro['idioma'] = registro['idioma'][:12]
+
+    return quantidade, lista
+    
 
 # Main
 if __name__ == '__main__':
     # Definindo os arquivos 
-    arquivo_in = 'musics.txt'
+    arquivo_in = argv[1]
     arquivo_busca = 'entrada1.txt'
     arquivo_out = 'saida1.txt'
 
@@ -64,4 +82,6 @@ if __name__ == '__main__':
     # Funções
     quantidade, registros = armazena(arquivo_in, registro, registros)
 
+    
+    
 
