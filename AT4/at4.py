@@ -17,6 +17,7 @@
 '''
 # Bibliotecas 
 from sys import argv
+
 # Para o funcionamento do indice primario
     # Ler um registro com base no RRN
     # Ordenar o arquivo de indices 
@@ -24,6 +25,7 @@ from sys import argv
     # Criar tabela de indices, onde cada indice é uma tupla (RRN, cc)
     # Carregar as informações dos registros para a tabela de indices 
     # Pesquisar baseado na chave canonica
+
 
 # Manipulando os dados do arquivo
 
@@ -66,7 +68,19 @@ def armazena(arquivo, dicionario, lista):
             registro['idioma'] = registro['idioma'][:12]
 
     return quantidade, lista
+
+# Função que gera chave canonica, retornando uma lista contendo as chaves canonicas do registros
+# a chave canonica é definida pelo TITULO + ARTISTA 
+def gera_cc(registros):
+    chaves = list()
+
+    for registro in registros:
+        titulo = registro['titulo'].replace(' ', '').upper()
+        artista = registro['artista'].replace(' ', '').upper()
+        chave_cc = titulo + artista
+        chaves.append(chave_cc)
     
+    return chaves
 
 # Main
 if __name__ == '__main__':
@@ -81,7 +95,8 @@ if __name__ == '__main__':
 
     # Funções
     quantidade, registros = armazena(arquivo_in, registro, registros)
-
+    chaves_cc = gera_cc(registros)
+    
     
     
 
