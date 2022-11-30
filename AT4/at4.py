@@ -23,3 +23,45 @@
     # Carregar as informações dos registros para a tabela de indices 
     # Pesquisar baseado na chave canonica
 
+# Manipulando os dados do arquivo
+    # Abro o arquivo de entrada, leio e armazeno as informações contidas nele
+def armazena(arquivo, dicionario, lista):
+    arquivo = open(arquivo, 'r')
+    linhas = arquivo.readlines()
+    
+    # Guardadando a quantidade de registros no arquivo
+    cabecalho = linhas[0].split('QTDE=')
+    cabecalho_aux = cabecalho.split(' ')
+    quantidade = cabecalho_aux[0]
+    
+    for count in range(1, len(linhas)):
+        itens = linhas[count].split('|').strip()
+        if len(itens) == 6:
+            dicionario['ano'] = itens[0]
+            dicionario['duracao'] = itens[1]
+            dicionario['titulo'] = itens[2]
+            dicionario['artista'] = itens[3]
+            dicionario['genero'] = itens[4]
+            dicionario['idioma'] = itens[5]
+
+            lista.append(dicionario)
+    
+    return quantidade, dicionario
+    
+    # Defino o tamanho dos itens do arquivo
+
+# Main
+if __name__ == '__main__':
+    # Definindo os arquivos 
+    arquivo_in = 'musics.txt'
+    arquivo_busca = 'entrada1.txt'
+    arquivo_out = 'saida1.txt'
+
+    # Criando a lista e os dicionarios
+    registros = list()
+    registro = dict()
+
+    # Funções
+    quantidade, registros = armazena(arquivo_in, registro, registros)
+
+
