@@ -27,7 +27,7 @@ from sys import argv
     # Pesquisar baseado na chave canonica
 
 
-# Manipulando os dados do arquivo
+#------------------------------------ Manipulando os dados do arquivo ----------------------------------                                                                                                        
 
 # Abro o arquivo de entrada, leio e armazeno as informações contidas nele
 def armazena(arquivo, dicionario, lista):
@@ -69,6 +69,11 @@ def armazena(arquivo, dicionario, lista):
 
     return quantidade, lista
 
+
+#------------------------------------ Fim manipulação do arquivo ------------------------------------
+
+#------------------------------------ Funções auxiliares ------------------------------------
+
 # Função que gera chave canonica, retornando uma lista contendo as chaves canonicas do registros
 # a chave canonica é definida pelo TITULO + ARTISTA 
 def gera_cc(registros):
@@ -81,6 +86,8 @@ def gera_cc(registros):
         chaves.append(chave_cc)
     
     return chaves
+
+#------------------------------------ Fim das funções auxiliares ------------------------------------
 
 # Main
 if __name__ == '__main__':
