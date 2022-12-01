@@ -78,7 +78,7 @@ def info_busca(arquivo_in):
     linhas = arquivo.readlines()
     arquivo.close()
     campo = linhas[0].replace('\n', '').lower()
-    item_pesquisa = linhas[1].strip().upper().replace('\n', '')
+    item_pesquisa = linhas[1].strip().replace('\n', '')
 
     return campo, item_pesquisa
 
@@ -94,6 +94,28 @@ def gera_cc(registro):
     chave_cc = titulo + artista
     return chave_cc
 
+def busca_binaria(tabela_indices, valores, chave_busca):
+    inicio = 0
+    fim = len(tabela_indices) - 1
+    chave_busca = chave_busca.upper()
+
+    while inicio <= fim:
+        meio = int((inicio + fim) / 2)
+        valor = tabela_indices[meio][1].upper()
+
+        if valor == chave_busca:
+            valores.append(tabela_indices[meio])
+            del(tabela_indices[meio])
+            busca_binaria(tabela_indices, valores, chave_busca)
+            return valores
+        if valor > chave_busca:
+            fim = meio - 1
+        else:
+            inicio = meio + 1
+
+    return valores
+
+        
 #******************************** Fim das funções auxiliares ********************************
 
 #******************************** Indice Primario ********************************
@@ -115,23 +137,25 @@ def tabela_idx_primario(registros):
 def tabela_idx_secundario(registros, campo):
     # Lista que representa a tabela de indices primarios
     idx_secundarios = list()
-    for count, registro in enumerate(registros):
-        key = registro[campo]
-        tupla = (count, key)
+    for registro in registros:
+        key_sec = registro[campo]
+        key_primaria = gera_cc(registro)
+        tupla = (key_primaria, key_sec)
         idx_secundarios.append(tupla)
     # Ordenar e restornar a tabela de indices secundarios
     idx_secundarios.sort(key = lambda tup: tup[1])
     return idx_secundarios
 
 # Função que realiza a busca atraves do rrn na tabela de indices e caso exista retorna  o registro inteiro
-#def pesquisarRegistro(chave): # [retornar 1 registro ou nada]
-        # 1. Pesquisa/busca binária na Tabela de indices
-        # na coluna Chave Canonica
-        # 2a. Falhou -> return None
-        # 2b. Encontrei: (Caralho! É isso)
-        #   - acessar o RRN (tupla)
-        #   - fazer a leitura do registro no arquivo de dados (via RRN)
-        #   - retornar (registro)
+def pesquisarRegistro(chave_busca, idx_primario, idx_secundarios): # [retornar 1 registro ou nada]
+    # Pesquisar na tabela de indices secundarios a chave de busca
+    valores_secundarios = list()
+    valores_secundarios = busca_binaria(idx_secundarios, valores_secundarios, chave_busca)
+    return valores_secundarios
+        # Caso encontre, retornar a chave primaria correspondente e pesquisar na tabela Idx_Primaria
+        # e retornar uma lista com os RRN's correspondentes
+    # Caso não encontre, a função retorna uma lista vazia 
+    
 
 #******************************** Fim Indice Primario ********************************
 
@@ -151,10 +175,10 @@ if __name__ == '__main__':
     registros = armazena(arquivo_in, registro, registros)
     idx_primarios = tabela_idx_primario(registros)
     idx_secundarios = tabela_idx_secundario(registros, campo)
-
-    for idx in idx_secundarios:
-        print(idx)   
-    print(item_pesquisa)
+    valores = pesquisarRegistro(item_pesquisa, idx_primarios, idx_secundarios)
+    
+    for valor in valores:
+        print(valor)
 
     #teste = [0, 14, 33, 5, 30]
     #imprime_resultado(arquivo_out, teste, registros)
