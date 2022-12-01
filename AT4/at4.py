@@ -19,15 +19,15 @@
 from sys import argv
 
 # Para o funcionamento do indice primario
-    # Ler um registro com base no RRN
-    # Ordenar o arquivo de indices 
-    # Gerar chave canonica
-    # Criar tabela de indices, onde cada indice é uma tupla (RRN, cc)
-    # Carregar as informações dos registros para a tabela de indices 
+    # Ler um registro com base no RRN (pesquisar)
+    # Ordenar o arquivo de indices - Feito 
+    # Gerar chave canonica - Feito
+    # Criar tabela de indices, onde cada indice é uma tupla (RRN, cc) - Feito
+    # Carregar as informações dos registros para a tabela de indices - Feito
     # Pesquisar baseado na chave canonica
 
 
-#------------------------------------ Manipulando os dados do arquivo ----------------------------------                                                                                                        
+#******************************** Manipulando os dados do arquivo ********************************
 
 # Abro o arquivo de entrada, leio e armazeno as informações contidas nele
 def armazena(arquivo, dicionario, lista):
@@ -70,9 +70,9 @@ def armazena(arquivo, dicionario, lista):
     return quantidade, lista
 
 
-#------------------------------------ Fim manipulação do arquivo ------------------------------------
+#******************************** Fim manipulação do arquivo ********************************
 
-#------------------------------------ Funções auxiliares ------------------------------------
+#******************************** Funções auxiliares ********************************
 
 # Função que gera chave canonica, retornando uma lista contendo as chaves canonicas do registros
 # a chave canonica é definida pelo TITULO + ARTISTA 
@@ -82,13 +82,13 @@ def gera_cc(registro):
     chave_cc = titulo + artista
     return chave_cc
 
-#------------------------------------ Fim das funções auxiliares ------------------------------------
+#******************************** Fim das funções auxiliares ********************************
 
-#------------------------------------ Indice Primario ------------------------------------
-
+#******************************** Indice Primario ********************************
 # A tabela de indices primarios é composto de uma lista de tuplas onde cada tupla é composta por (RRN, cc)
-
+#--------------------------------------------------------------------
 # Criar uma tabela de indices primarios e ordenar eles, e retornar a tabela de indices primarios
+#--------------------------------------------------------------------
 def tabela_idx_primario(registros):
     # Cria a tabela de indices primarios 
     idx_primario = list()
@@ -97,15 +97,31 @@ def tabela_idx_primario(registros):
         tupla = (count, key)
         idx_primario.append(tupla)
     
-    # Ordenar a tabela de indices primarios
+    # Ordenar a tabela de indices primarios e retorna-la
     idx_primario.sort(key = lambda tup: tup[1])    
-    
-    #Retorna a tabela de indices primarios já ordenada
     return idx_primario
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+# Função que realiza a busca atraves do rrn na tabela de indices e caso exista retorna  o registro inteiro
+#--------------------------------------------------------------------
+
+def pesquisarRegistro(chave): # [retornar 1 registro ou nada]
+        # 1. Pesquisa/busca binária na Tabela de indices
+        # na coluna Chave Canonica
+        # 2a. Falhou -> return None
+        # 2b. Encontrei: (Caralho! É isso)
+        #   - acessar o RRN (tupla)
+        #   - fazer a leitura do registro no arquivo de dados (via RRN)
+        #   - retornar (registro)
+
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
 
 
 
-#------------------------------------ Fim Indice Primario ------------------------------------
+#******************************** Fim Indice Primario ********************************
 
 # Main
 if __name__ == '__main__':
