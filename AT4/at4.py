@@ -35,11 +35,6 @@ def armazena(arquivo, dicionario, lista):
     linhas = arquivo.readlines()
     arquivo.close()
 
-    # Guardadando a quantidade de registros no arquivo
-    cabecalho = linhas[0].split('QTDE=')
-    cabecalho_aux = cabecalho[1].split(' ')
-    quantidade = int(cabecalho_aux[0])
-    
     for count in range(1, len(linhas)):
         itens = linhas[count].split('|')
         if len(itens) == 6:
@@ -67,15 +62,31 @@ def armazena(arquivo, dicionario, lista):
         if len(registro['idioma']) > 12:
             registro['idioma'] = registro['idioma'][:12]
 
-    return quantidade, lista
+    return lista
+
+# Escreve no arquivo de saido os registros resultantes da busca
+def imprime_resultado(arquivo_out, resultado_busca, regs):
+    arquivo = open(arquivo_out, 'w')
+    for rrn in resultado_busca:
+        registro = regs[rrn]['ano'] + '|' + regs[rrn]['duracao'] + '|' + regs[rrn]['titulo'] + '|' + regs[rrn]['artista'] + '|' + regs[rrn]['genero'] + '|' + regs[rrn]['idioma']
+        arquivo.write(registro)  
+    arquivo.close()  
+
+# Lê o arquivo auxiliar, e retorna o as informações contidas nele
+def info_busca(arquivo_in):
+    arquivo = open(arquivo_in, 'r')
+    linhas = arquivo.readlines()
+    arquivo.close()
+    campo = linhas[0]
+    item_pesquisa = linhas[1].strip().upper()
+    return campo, item_pesquisa
 
 
 #******************************** Fim manipulação do arquivo ********************************
 
 #******************************** Funções auxiliares ********************************
 
-# Função que gera chave canonica, retornando uma lista contendo as chaves canonicas do registros
-# a chave canonica é definida pelo TITULO + ARTISTA 
+# Função que gera chave canonica, retornando uma lista contendo as chaves canonicas do registros a chave canonica é TITULO + ARTISTA 
 def gera_cc(registro):
     titulo = registro['titulo'].replace(' ', '').upper()
     artista = registro['artista'].replace(' ', '').upper()
@@ -86,9 +97,7 @@ def gera_cc(registro):
 
 #******************************** Indice Primario ********************************
 # A tabela de indices primarios é composto de uma lista de tuplas onde cada tupla é composta por (RRN, cc)
-#--------------------------------------------------------------------
 # Criar uma tabela de indices primarios e ordenar eles, e retornar a tabela de indices primarios
-#--------------------------------------------------------------------
 def tabela_idx_primario(registros):
     # Cria a tabela de indices primarios 
     idx_primario = list()
@@ -100,14 +109,21 @@ def tabela_idx_primario(registros):
     # Ordenar a tabela de indices primarios e retorna-la
     idx_primario.sort(key = lambda tup: tup[1])    
     return idx_primario
-#--------------------------------------------------------------------
-#--------------------------------------------------------------------
 
-#--------------------------------------------------------------------
+# Criando a tabela de indices secundarios formada pelo par ordenado: (RRN, campo)
+def tabela_idx_secundario(registros, campo):
+    # Lista que representa a tabela de indices primarios
+    idx_secundarios = list()
+    for count, registro in enumerate(registros):
+        key = registro[campo]
+        tupla = (count, key)
+        idx_secundarios.append(tupla)
+    # Ordenar e restornar a tabela de indices secundarios
+    idx_primarios.sort(key = lambda tup: tup[1])
+    return idx_secundarios
+    
 # Função que realiza a busca atraves do rrn na tabela de indices e caso exista retorna  o registro inteiro
-#--------------------------------------------------------------------
-
-def pesquisarRegistro(chave): # [retornar 1 registro ou nada]
+#def pesquisarRegistro(chave): # [retornar 1 registro ou nada]
         # 1. Pesquisa/busca binária na Tabela de indices
         # na coluna Chave Canonica
         # 2a. Falhou -> return None
@@ -115,11 +131,6 @@ def pesquisarRegistro(chave): # [retornar 1 registro ou nada]
         #   - acessar o RRN (tupla)
         #   - fazer a leitura do registro no arquivo de dados (via RRN)
         #   - retornar (registro)
-
-#--------------------------------------------------------------------
-#--------------------------------------------------------------------
-
-
 
 #******************************** Fim Indice Primario ********************************
 
@@ -135,11 +146,14 @@ if __name__ == '__main__':
     registro = dict()
 
     # Funções
-    quantidade, registros = armazena(arquivo_in, registro, registros)
+    campo, item_pesquisa = info_busca(arquivo_busca)
+    registros = armazena(arquivo_in, registro, registros)
     idx_primarios = tabela_idx_primario(registros)
+    idx_secundarios =     
 
-    
-    
+    #teste = [0, 14, 33, 5, 30]
+    #imprime_resultado(arquivo_out, teste, registros)
+
     
     
 
