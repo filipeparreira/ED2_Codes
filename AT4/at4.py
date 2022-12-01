@@ -76,18 +76,36 @@ def armazena(arquivo, dicionario, lista):
 
 # Função que gera chave canonica, retornando uma lista contendo as chaves canonicas do registros
 # a chave canonica é definida pelo TITULO + ARTISTA 
-def gera_cc(registros):
-    chaves = list()
-
-    for registro in registros:
-        titulo = registro['titulo'].replace(' ', '').upper()
-        artista = registro['artista'].replace(' ', '').upper()
-        chave_cc = titulo + artista
-        chaves.append(chave_cc)
-    
-    return chaves
+def gera_cc(registro):
+    titulo = registro['titulo'].replace(' ', '').upper()
+    artista = registro['artista'].replace(' ', '').upper()
+    chave_cc = titulo + artista
+    return chave_cc
 
 #------------------------------------ Fim das funções auxiliares ------------------------------------
+
+#------------------------------------ Indice Primario ------------------------------------
+
+# A tabela de indices primarios é composto de uma lista de tuplas onde cada tupla é composta por (RRN, cc)
+
+# Criar uma tabela de indices primarios e ordenar eles, e retornar a tabela de indices primarios
+def tabela_idx_primario(registros):
+    # Cria a tabela de indices primarios 
+    idx_primario = list()
+    for count, registro in enumerate(registros):
+        key = gera_cc(registro)        
+        tupla = (count, key)
+        idx_primario.append(tupla)
+    
+    # Ordenar a tabela de indices primarios
+    idx_primario.sort(key = lambda tup: tup[1])    
+    
+    #Retorna a tabela de indices primarios já ordenada
+    return idx_primario
+
+
+
+#------------------------------------ Fim Indice Primario ------------------------------------
 
 # Main
 if __name__ == '__main__':
@@ -102,7 +120,9 @@ if __name__ == '__main__':
 
     # Funções
     quantidade, registros = armazena(arquivo_in, registro, registros)
-    chaves_cc = gera_cc(registros)
+    idx_primarios = tabela_idx_primario(registros)
+
+    
     
     
     
