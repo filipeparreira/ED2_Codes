@@ -77,8 +77,9 @@ def info_busca(arquivo_in):
     arquivo = open(arquivo_in, 'r')
     linhas = arquivo.readlines()
     arquivo.close()
-    campo = linhas[0]
-    item_pesquisa = linhas[1].strip().upper()
+    campo = linhas[0].replace('\n', '').lower()
+    item_pesquisa = linhas[1].strip().upper().replace('\n', '')
+
     return campo, item_pesquisa
 
 
@@ -119,9 +120,9 @@ def tabela_idx_secundario(registros, campo):
         tupla = (count, key)
         idx_secundarios.append(tupla)
     # Ordenar e restornar a tabela de indices secundarios
-    idx_primarios.sort(key = lambda tup: tup[1])
+    idx_secundarios.sort(key = lambda tup: tup[1])
     return idx_secundarios
-    
+
 # Função que realiza a busca atraves do rrn na tabela de indices e caso exista retorna  o registro inteiro
 #def pesquisarRegistro(chave): # [retornar 1 registro ou nada]
         # 1. Pesquisa/busca binária na Tabela de indices
@@ -137,9 +138,9 @@ def tabela_idx_secundario(registros, campo):
 # Main
 if __name__ == '__main__':
     # Definindo os arquivos 
-    arquivo_in = argv[1]
-    arquivo_busca = 'entrada1.txt'
-    arquivo_out = 'saida1.txt'
+    arquivo_in = 'musics.txt'
+    arquivo_busca = argv[1]
+    arquivo_out = argv[2]
 
     # Criando a lista e os dicionarios
     registros = list()
@@ -149,7 +150,11 @@ if __name__ == '__main__':
     campo, item_pesquisa = info_busca(arquivo_busca)
     registros = armazena(arquivo_in, registro, registros)
     idx_primarios = tabela_idx_primario(registros)
-    idx_secundarios =     
+    idx_secundarios = tabela_idx_secundario(registros, campo)
+
+    for idx in idx_secundarios:
+        print(idx)   
+    print(item_pesquisa)
 
     #teste = [0, 14, 33, 5, 30]
     #imprime_resultado(arquivo_out, teste, registros)
