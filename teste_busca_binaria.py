@@ -1,4 +1,33 @@
-def binarySearch(array, item_busca, found, valores):
+# List of tuples
+Input = [(11, 22), (33, 55), (55, 77), (11, 44), (33, 22), (99, 11)]
+
+# Using filter
+Output = list(filter(lambda x:44 in x, Input))
+
+# Printing output
+print(Output)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''def binarySearch(array, item_busca, found, valores):
     if sorted(array) != array:
         print("Array is not sorted!")
         return found
@@ -29,3 +58,7 @@ res, valores = binarySearch(my_list, 89, found, valores)
 if res == True:
     print('O numero pesquisado foi encontrado')
 print(f'Lista depois da busca binaria: {my_list}')
+'''
+
+
+

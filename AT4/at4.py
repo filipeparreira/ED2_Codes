@@ -166,23 +166,21 @@ def tabela_idx_secundario(registros, campo):
     return idx_secundarios
 
 # Função que realiza a busca atraves do rrn na tabela de indices e caso exista retorna  o registro inteiro
-def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios): # [retornar 1 registro ou nada]
+def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
+    
     # Pesquisar na tabela de indices secundarios a chave de busca
     valores_secundarios = list()
-    encontrou = False
     valores_secundarios = busca_binaria_composta(idx_secundarios, chave_busca, valores_secundarios)
     
     if len(valores_secundarios) > 0:
         valores_RRN = list()
-        # Caso encontre, retornar a chave primaria correspondente e pesquisar na tabela Idx_Primaria
         for valor in valores_secundarios:
             resultado = busca_binaria_simples(idx_primarios, valor[0])
-            # e retornar uma lista com os RRN's correspondentes
             if resultado != False:
                valores_RRN.append(resultado)
-    
         return valores_RRN              
-    # Caso não encontre, a função retorna uma lista vazia 
+    
+    # Caso os valores de retorno da pesquisa dentro do idx_secundario venha vazio, retorna uma lista vazia
     return list()
     
 
