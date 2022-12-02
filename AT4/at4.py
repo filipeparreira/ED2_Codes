@@ -177,7 +177,7 @@ def tabela_idx_secundario(registros, campo):
     # Lista que representa a tabela de indices primarios
     idx_secundarios = list()
     for registro in registros:
-        key_sec = registro[campo].strip()
+        key_sec = registro[campo].strip().upper()
         key_primaria = gera_cc(registro)
         tupla = (key_primaria, key_sec)
         idx_secundarios.append(tupla)
@@ -191,13 +191,14 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios): # [retornar 
     valores_secundarios = list()
     #valores_secundarios = busca_binaria_composta(idx_secundarios, chave_busca, valores_secundarios)
     
-    while True:
+    '''while True:
         resultado, valor = binarySearch(idx_secundarios, chave_busca.upper())
         if resultado != False:
-            print('entrou?')
             valores_secundarios.append(valor)
         elif resultado == False:
-            break
+            break'''
+
+    valores_secundarios = list(filter(lambda x:chave_busca.upper() in x, idx_secundarios))
     
     print(len(valores_secundarios))
 
