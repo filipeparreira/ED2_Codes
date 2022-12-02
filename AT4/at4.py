@@ -94,26 +94,28 @@ def gera_cc(registro):
     chave_cc = titulo + artista
     return chave_cc
 
-def busca_binaria_composta(tabela_indices, valores, chave_busca):
+def busca_binaria_composta(tabela_indices, chave_busca, lista):
     inicio = 0
     fim = len(tabela_indices) - 1
     chave_busca = chave_busca.upper()
-
+    
     while inicio <= fim:
-        meio = int((inicio + fim) / 2)
-        valor = tabela_indices[meio][1].upper()
+        meio = (inicio + fim) // 2
+        item = tabela_indices[meio]
 
-        if valor == chave_busca:
-            valores.append(tabela_indices[meio])
+        if item[1].upper() == chave_busca:
+            lista.append(item)
             del(tabela_indices[meio])
-            busca_binaria_composta(tabela_indices, valores, chave_busca)
-            return valores
-        if valor > chave_busca:
+            tabela_indices.sort(key = lambda tup: tup[1])
+            busca_binaria_composta(tabela_indices, chave_busca, lista)
+            return lista
+        if item[1].upper() > chave_busca:
             fim = meio - 1
         else:
             inicio = meio + 1
+    
+    return lista
 
-    return valores
 
 def busca_binaria_simples(tabela_indices, chave_busca):
     inicio = 0
@@ -155,7 +157,7 @@ def tabela_idx_secundario(registros, campo):
     # Lista que representa a tabela de indices primarios
     idx_secundarios = list()
     for registro in registros:
-        key_sec = registro[campo]
+        key_sec = registro[campo].strip()
         key_primaria = gera_cc(registro)
         tupla = (key_primaria, key_sec)
         idx_secundarios.append(tupla)
@@ -167,7 +169,9 @@ def tabela_idx_secundario(registros, campo):
 def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios): # [retornar 1 registro ou nada]
     # Pesquisar na tabela de indices secundarios a chave de busca
     valores_secundarios = list()
-    valores_secundarios = busca_binaria_composta(idx_secundarios, valores_secundarios, chave_busca)
+    encontrou = False
+    valores_secundarios = busca_binaria_composta(idx_secundarios, chave_busca, valores_secundarios)
+    
     if len(valores_secundarios) > 0:
         valores_RRN = list()
         # Caso encontre, retornar a chave primaria correspondente e pesquisar na tabela Idx_Primaria
@@ -176,6 +180,7 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios): # [retornar 
             # e retornar uma lista com os RRN's correspondentes
             if resultado != False:
                valores_RRN.append(resultado)
+    
         return valores_RRN              
     # Caso não encontre, a função retorna uma lista vazia 
     return list()
@@ -199,12 +204,8 @@ if __name__ == '__main__':
     registros = armazena(arquivo_in, registro, registros)
     idx_primarios = tabela_idx_primario(registros)
     idx_secundarios = tabela_idx_secundario(registros, campo)
-    valores = pesquisarRegistro(item_pesquisa, idx_primarios, idx_secundarios)
-    
-    print(valores)
-    
-    #teste = [0, 14, 33, 5, 30]
-    #imprime_resultado(arquivo_out, teste, registros)
+    valores = pesquisarRegistro(item_pesquisa, idx_primarios.copy(), idx_secundarios.copy())
+    imprime_resultado(arquivo_out, valores, registros)
 
     
     
