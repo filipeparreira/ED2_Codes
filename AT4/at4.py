@@ -94,7 +94,8 @@ def gera_cc(registro):
     chave_cc = titulo + artista
     return chave_cc
 
-# Realiza a busca binaria dentro da tabela de indices secundaria retornando uma lista de valores
+
+# Realiza a busca binaria dentro da tabela de indices secundaria retornando uma lista de valores (NÃO USADA)
 def busca_binaria_composta(tabela_indices, chave_busca, lista):
     inicio = 0
     fim = len(tabela_indices) - 1
@@ -117,6 +118,8 @@ def busca_binaria_composta(tabela_indices, chave_busca, lista):
     return lista
 
 
+# A partir das CC's gerados pela busca na tabela de indices secudarios ele busca na tabela de indices primarios e retorna
+# os RRN's correspondentes, para que possa ser realizada a impressão no arquivo de saída
 def busca_binaria_simples(tabela_indices, chave_busca):
     inicio = 0
     fim = len(tabela_indices) - 1
@@ -135,7 +138,9 @@ def busca_binaria_simples(tabela_indices, chave_busca):
 
     return False
 
-def binarySearch(array, item):
+
+#Teste de busca binaria
+'''def binarySearch(array, item):
 
     found = False
 
@@ -154,8 +159,10 @@ def binarySearch(array, item):
             else:
                 first = midpoint+1
     return found, valor
-
+'''
 #******************************** Fim das funções auxiliares ********************************
+
+
 
 #******************************** Indice Primario ********************************
 # A tabela de indices primarios é composto de uma lista de tuplas onde cada tupla é composta por (RRN, cc)
@@ -172,6 +179,7 @@ def tabela_idx_primario(registros):
     idx_primario.sort(key = lambda tup: tup[1])    
     return idx_primario
 
+
 # Criando a tabela de indices secundarios formada pelo par ordenado: (RRN, campo)
 def tabela_idx_secundario(registros, campo):
     # Lista que representa a tabela de indices primarios
@@ -184,6 +192,7 @@ def tabela_idx_secundario(registros, campo):
     # Ordenar e restornar a tabela de indices secundarios
     idx_secundarios.sort(key = lambda tup: tup[1])
     return idx_secundarios
+
 
 # Função que realiza a busca atraves do rrn na tabela de indices e caso exista retorna  o registro inteiro
 def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
@@ -201,7 +210,7 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
 
     valores_secundarios = list(filter(lambda x:chave_busca.upper() in x, idx_secundarios))
     
-    print(len(valores_secundarios))
+    #print(valores_secundarios)
 
     if len(valores_secundarios) > 0:
         valores_RRN = list()
@@ -215,8 +224,8 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
     return list()
     
 
-#******************************** Fim Indice Primario ********************************
 
+#******************************** Fim Indice Primario ********************************
 # Main
 if __name__ == '__main__':
     # Definindo os arquivos 
