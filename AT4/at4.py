@@ -238,6 +238,3 @@ if __name__ == '__main__':
     # 5º - Com os RRN's em mãos, é impresso então os registros no arquivo de saída, utilizando o RRN como auxiliar de impressão
     imprime_resultado(arquivo_out, valores, registros)
 #******************************** Fim - MAIN ********************************
-    
-    
-
