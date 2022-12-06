@@ -100,7 +100,7 @@ def gera_cc(registro):
 
 # A partir das CC's gerados pela busca na tabela de indices secudarios ele busca na tabela de indices primarios e retorna
 # os RRN's correspondentes, para que possa ser realizada a impressão no arquivo de saída
-def busca_binaria_simples(tabela_indices, chave_busca):
+def busca_binaria(tabela_indices, chave_busca):
     inicio = 0
     fim = len(tabela_indices) - 1
     chave_busca = chave_busca.upper()
@@ -142,7 +142,7 @@ def tabela_idx_secundario(registros, campo):
     # Lista que representa a tabela de indices primarios
     idx_secundarios = list()
     for registro in registros:
-        key_sec = registro[campo].strip().upper().split(' ')
+        key_sec = registro[campo].replace(' ', '').upper()
         key_primaria = gera_cc(registro)
         tupla = (key_primaria, key_sec)
         idx_secundarios.append(tupla)
@@ -155,13 +155,15 @@ def tabela_idx_secundario(registros, campo):
 def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
     
     # Pesquisar na tabela de indices secundarios a chave de busca
+    chave_busca = chave_busca.upper().replace(' ', '')
     valores_secundarios = list()
-    valores_secundarios = list(filter(lambda x:chave_busca.upper() in x[1], idx_secundarios))
+    valores_secundarios = list(filter(lambda x:chave_busca in x[1], idx_secundarios))
+    
     
     if len(valores_secundarios) > 0:
         valores_RRN = list()
         for valor in valores_secundarios:
-            resultado = busca_binaria_simples(idx_primarios, valor[0])
+            resultado = busca_binaria(idx_primarios, valor[0])
             if resultado != False:
                valores_RRN.append(resultado[0])
         return valores_RRN              
