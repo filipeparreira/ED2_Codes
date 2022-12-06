@@ -1,0 +1,1 @@
+ERROR: Campo de busca - [pateta] - inexistente dentro da database!!

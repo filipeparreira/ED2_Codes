@@ -178,19 +178,49 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
 if __name__ == '__main__':
     # Definindo os arquivos 
     arquivo_in = 'musics.txt'
-    arquivo_busca = argv[1]
-    arquivo_out = argv[2]
-
+    try:
+        arquivo_busca = argv[1]
+        arquivo_out = argv[2]
+    except IndexError:
+        print('ERROR: Quantidade inválida de argumentos insira no seguinte formato:')
+        print(f'\n{"[nome do programa] [arquivo de dados] [arquivo de entrada] [arquivo de saída]":^100}\n')
+        exit()
+    
     # Criando a lista e os dicionarios
     registros = list()
     registro = dict()
 
     # Funções
-    campo, item_pesquisa = info_busca(arquivo_busca)
+    # 1º - Obtém do arquivo de entrada as informações que vão ser buscas na database
+    try:
+        campo, item_pesquisa = info_busca(arquivo_busca)
+    except IndexError:
+        arquivo = open(arquivo_out, 'w')
+        arquivo.write('Arquivo de entrada vazio!!')
+        arquivo.close()
+        exit()
+    except FileNotFoundError:
+        print('ERROR: Arquivo de entrada inexistente!!')
+        exit()
+    
+    # 2º - Armazena da lista todos os registros contidos na database
     registros = armazena(arquivo_in, registro, registros)
+
+    # 3º - Cria tanto a tabela de indices primarios, quanto secudarios
     idx_primarios = tabela_idx_primario(registros)
-    idx_secundarios = tabela_idx_secundario(registros, campo)
+    try:
+        idx_secundarios = tabela_idx_secundario(registros, campo)
+    except KeyError:
+        arquivo = open(arquivo_out, 'w')
+        arquivo.write(f'ERROR: Campo de busca - [{campo}] - inexistente dentro da database!!')
+        arquivo.close()
+        exit()
+
+    # 4º - Com as tabelas de indices já criadas e a chave de busca já obtida, é buscado então a informação nas tabelas,
+    # retornando uma lista contendo os RRN's dos itens caso encontrados, ou então uma lista vazia
     valores = pesquisarRegistro(item_pesquisa, idx_primarios.copy(), idx_secundarios.copy())
+
+    # 5º - Com os RRN's em mãos, é impresso então os registros no arquivo de saída, utilizando o RRN como auxiliar de impressão
     imprime_resultado(arquivo_out, valores, registros)
 
     
