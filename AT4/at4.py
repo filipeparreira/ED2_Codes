@@ -67,9 +67,12 @@ def armazena(arquivo, dicionario, lista):
 # Escreve no arquivo de saida os registros resultantes da busca atraves do RRN
 def imprime_resultado(arquivo_out, resultado_busca, regs):
     arquivo = open(arquivo_out, 'w')
-    for rrn in resultado_busca:
-        registro = regs[rrn]['ano'] + '|' + regs[rrn]['duracao'] + '|' + regs[rrn]['titulo'] + '|' + regs[rrn]['artista'] + '|' + regs[rrn]['genero'] + '|' + regs[rrn]['idioma']
-        arquivo.write(registro)  
+    if len(resultado_busca) == 0:
+        arquivo.write('Nenhum registro foi encontrado!')
+    else:
+        for rrn in resultado_busca:
+            registro = regs[rrn]['ano'] + '|' + regs[rrn]['duracao'] + '|' + regs[rrn]['titulo'] + '|' + regs[rrn]['artista'] + '|' + regs[rrn]['genero'] + '|' + regs[rrn]['idioma']
+            arquivo.write(registro)  
     arquivo.close()  
 
 
@@ -144,7 +147,7 @@ def tabela_idx_secundario(registros, campo):
         tupla = (key_primaria, key_sec)
         idx_secundarios.append(tupla)
     # Ordenar e restornar a tabela de indices secundarios
-    idx_secundarios.sort(key = lambda tup: tup[1])
+    #idx_secundarios.sort(key = lambda tup: tup[1])
     return idx_secundarios
 
 
@@ -159,7 +162,6 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
         valores_RRN = list()
         for valor in valores_secundarios:
             resultado = busca_binaria_simples(idx_primarios, valor[0])
-            print(valor)
             if resultado != False:
                valores_RRN.append(resultado[0])
         return valores_RRN              
