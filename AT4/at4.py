@@ -15,16 +15,11 @@
             - Criar, carregar e pesquisar (Tanto no indice primario quanto no indice secundario)
             - E funções auxiliares (Ler_registro_com_RRN, ordenarIndx, criar_RRN)
 '''
-# Bibliotecas 
-from sys import argv
 
-# Para o funcionamento do indice primario
-    # Ler um registro com base no RRN (pesquisar)
-    # Ordenar o arquivo de indices - Feito 
-    # Gerar chave canonica - Feito
-    # Criar tabela de indices, onde cada indice é uma tupla (RRN, cc) - Feito
-    # Carregar as informações dos registros para a tabela de indices - Feito
-    # Pesquisar baseado na chave canonica
+#******************************** Bibliotecas ********************************
+from sys import argv
+#******************************** Fim - Bibliotecas ********************************
+
 
 
 #******************************** Manipulando os dados do arquivo ********************************
@@ -61,18 +56,22 @@ def armazena(arquivo, dicionario, lista):
         if len(registro['idioma']) > 12:
             registro['idioma'] = registro['idioma'][:12]
 
+    # Retorno a lista de dicionarios contendo os itens já em tamanhos definidos 
     return lista
 
 
 # Escreve no arquivo de saida os registros resultantes da busca atraves do RRN
 def imprime_resultado(arquivo_out, resultado_busca, regs):
     arquivo = open(arquivo_out, 'w')
+
+    # Verifica se o resultado da busca é uma lista vazia
     if len(resultado_busca) == 0:
         arquivo.write('Nenhum registro foi encontrado!')
     else:
         for rrn in resultado_busca:
             registro = regs[rrn]['ano'] + '|' + regs[rrn]['duracao'] + '|' + regs[rrn]['titulo'] + '|' + regs[rrn]['artista'] + '|' + regs[rrn]['genero'] + '|' + regs[rrn]['idioma']
             arquivo.write(registro)  
+
     arquivo.close()  
 
 
@@ -81,6 +80,7 @@ def info_busca(arquivo_in):
     arquivo = open(arquivo_in, 'r')
     linhas = arquivo.readlines()
     arquivo.close()
+
     campo = linhas[0].replace('\n', '').lower()
     item_pesquisa = linhas[1].strip().replace('\n', '')
 
@@ -90,7 +90,7 @@ def info_busca(arquivo_in):
 
 
 #******************************** Funções auxiliares ********************************
-# Função que gera chave canonica, retornando uma lista contendo as chaves canonicas do registros a chave canonica é TITULO + ARTISTA 
+# Função que gera chave canonica, retornando uma lista contendo as chaves canonicas dos registros. A chave canonica é TITULO + ARTISTA 
 def gera_cc(registro):
     titulo = registro['titulo'].replace(' ', '').upper()
     artista = registro['artista'].replace(' ', '').upper()
@@ -99,7 +99,7 @@ def gera_cc(registro):
 
 
 # A partir das CC's gerados pela busca na tabela de indices secudarios ele busca na tabela de indices primarios e retorna
-# os RRN's correspondentes, para que possa ser realizada a impressão no arquivo de saída
+# os RRN's correspondentes, para que possa ser realizada a impressão no arquivo de saída. (Foi implementado o algoritmo de busca binaria)
 def busca_binaria(tabela_indices, chave_busca):
     inicio = 0
     fim = len(tabela_indices) - 1
@@ -121,18 +121,22 @@ def busca_binaria(tabela_indices, chave_busca):
 
 
 
-#******************************** Indice Primario ********************************
-# A tabela de indices primarios é composto de uma lista de tuplas onde cada tupla é composta por (RRN, cc)
-# Criar uma tabela de indices primarios e ordenar eles, e retornar a tabela de indices primarios
+#******************************** Indice Primario / Indice Secundario ********************************
+# A tabela de indices primarios/secundarios é composto de uma lista de tuplas onde cada tupla é composta por (RRN, CC) e (CC, Campo_Busca),
+# respectivamente.
+
+# Criar uma tabela de indices primarios, ordenar eles, e retornar a tabela
 def tabela_idx_primario(registros):
     # Cria a tabela de indices primarios 
     idx_primario = list()
+
+    # Para cada registro, verificase também o indice dele, que é adotado como RRN do registro
     for count, registro in enumerate(registros):
         key = gera_cc(registro)        
         tupla = (count, key)
         idx_primario.append(tupla)
     
-    # Ordenar a tabela de indices primarios e retorna-la
+    # Ordenar a tabela de indices primarios, com base na CC, e retorna-la
     idx_primario.sort(key = lambda tup: tup[1])    
     return idx_primario
 
@@ -141,28 +145,39 @@ def tabela_idx_primario(registros):
 def tabela_idx_secundario(registros, campo):
     # Lista que representa a tabela de indices primarios
     idx_secundarios = list()
+
+    # Para cada registro a gente busca o campo no dicionario e adota o conteudo deste campo como
+    # chave secundaria, mantendo a chave primaria como sendo a CC
     for registro in registros:
         key_sec = registro[campo].replace(' ', '').upper()
         key_primaria = gera_cc(registro)
         tupla = (key_primaria, key_sec)
         idx_secundarios.append(tupla)
-    # Ordenar e restornar a tabela de indices secundarios
+
+    # Neste caso, não é necessario ordenar a tabela de indices, pois não é utilizada busca binaria encima dela
     #idx_secundarios.sort(key = lambda tup: tup[1])
     return idx_secundarios
+#******************************** Fim - Indice Primario / Indice Secundario ********************************
 
 
-# Função que realiza a busca atraves do rrn na tabela de indices e caso exista retorna  o registro inteiro
+
+#******************************** Função - Manipulação Idx_Primario / Idx_Secundario ********************************
+# É buscado na tabela de indices secundarios o item de busca, caso encontre, utiliza-se a CC para obter o RRN
+# dentro da tabela de indices primarios, retornando uma lista contendo os RRN's; caso não encontre, retorna uma lista vazia.
 def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
-    
-    # Pesquisar na tabela de indices secundarios a chave de busca
+    # Pesquisar na tabela de indices secundarios a chave de busca, retornando uma lista de tuplas contendo os resultados 
+    # para a busca, foi utilizado uma função da própria linguagem Python3: filter()
     chave_busca = chave_busca.upper().replace(' ', '')
-    valores_secundarios = list()
-    valores_secundarios = list(filter(lambda x:chave_busca in x[1], idx_secundarios))
+    valores_idx_secundarios = list()
+    valores_idx_secundarios = list(filter(lambda x:chave_busca in x[1], idx_secundarios))
     
-    
-    if len(valores_secundarios) > 0:
+    # Verifica se encontrou algum item, caso tenha encontrado (tamanho da lista de tuplas maior que 0),
+    # percorre a lista de valores encontrados na tabela de indices secundarios, e utilizando a CC de cada valor,
+    # realiza-se a busca binaria dentro da tabela de indices primarios, caso encontre ele guarda o rrn dentro da 
+    # lista de RRN's
+    if len(valores_idx_secundarios) > 0:
         valores_RRN = list()
-        for valor in valores_secundarios:
+        for valor in valores_idx_secundarios:
             resultado = busca_binaria(idx_primarios, valor[0])
             if resultado != False:
                valores_RRN.append(resultado[0])
@@ -170,11 +185,11 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
     
     # Caso os valores de retorno da pesquisa dentro do idx_secundario venha vazio, retorna uma lista vazia
     return list()
+#******************************** Fim - Função - Manipulação Idx_Primario / Idx_Secundario ********************************
     
 
 
-#******************************** Fim Indice Primario ********************************
-# Main
+#******************************** MAIN ********************************
 if __name__ == '__main__':
     # Definindo os arquivos 
     arquivo_in = 'musics.txt'
@@ -222,7 +237,7 @@ if __name__ == '__main__':
 
     # 5º - Com os RRN's em mãos, é impresso então os registros no arquivo de saída, utilizando o RRN como auxiliar de impressão
     imprime_resultado(arquivo_out, valores, registros)
-
+#******************************** Fim - MAIN ********************************
     
     
 
