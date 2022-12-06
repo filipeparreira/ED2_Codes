@@ -134,7 +134,7 @@ def tabela_idx_primario(registros):
     return idx_primario
 
 
-# Criando a tabela de indices secundarios formada pelo par ordenado: (RRN, campo)
+# Criando a tabela de indices secundarios formada pelo par ordenado: (CC, campo)
 def tabela_idx_secundario(registros, campo):
     # Lista que representa a tabela de indices primarios
     idx_secundarios = list()
@@ -159,6 +159,7 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
         valores_RRN = list()
         for valor in valores_secundarios:
             resultado = busca_binaria_simples(idx_primarios, valor[0])
+            print(valor)
             if resultado != False:
                valores_RRN.append(resultado[0])
         return valores_RRN              
