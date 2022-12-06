@@ -95,29 +95,6 @@ def gera_cc(registro):
     return chave_cc
 
 
-# Realiza a busca binaria dentro da tabela de indices secundaria retornando uma lista de valores (NÃO USADA)
-def busca_binaria_composta(tabela_indices, chave_busca, lista):
-    inicio = 0
-    fim = len(tabela_indices) - 1
-    chave_busca = chave_busca.upper()
-    
-    while inicio <= fim:
-        meio = (inicio + fim) // 2
-        item = tabela_indices[meio]
-        if item[1].upper() == chave_busca:
-            lista.append(item)
-            del(tabela_indices[meio])
-            tabela_indices.sort(key = lambda tup: tup[1])
-            busca_binaria_composta(tabela_indices, chave_busca, lista)
-            return lista
-        if item[1].upper() > chave_busca:
-            fim = meio - 1
-        else:
-            inicio = meio + 1
-    
-    return lista
-
-
 # A partir das CC's gerados pela busca na tabela de indices secudarios ele busca na tabela de indices primarios e retorna
 # os RRN's correspondentes, para que possa ser realizada a impressão no arquivo de saída
 def busca_binaria_simples(tabela_indices, chave_busca):
@@ -137,29 +114,6 @@ def busca_binaria_simples(tabela_indices, chave_busca):
             inicio = meio + 1
 
     return False
-
-
-#Teste de busca binaria
-'''def binarySearch(array, item):
-
-    found = False
-
-    first = 0
-    last = len(array)-1
-
-    while first<=last and not found:
-        midpoint = (first + last)//2
-        valor = array[midpoint]
-        if valor[1].upper() == item:
-            found = True
-            del(array[midpoint])
-        else:
-            if item < valor[1].upper():
-                last = midpoint-1
-            else:
-                first = midpoint+1
-    return found, valor
-'''
 #******************************** Fim das funções auxiliares ********************************
 
 
@@ -185,7 +139,7 @@ def tabela_idx_secundario(registros, campo):
     # Lista que representa a tabela de indices primarios
     idx_secundarios = list()
     for registro in registros:
-        key_sec = registro[campo].strip().upper()
+        key_sec = registro[campo].strip().upper().split(' ')
         key_primaria = gera_cc(registro)
         tupla = (key_primaria, key_sec)
         idx_secundarios.append(tupla)
@@ -208,7 +162,7 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
         elif resultado == False:
             break'''
 
-    valores_secundarios = list(filter(lambda x:chave_busca.upper() in x, idx_secundarios))
+    valores_secundarios = list(filter(lambda x:chave_busca.upper() in x[1], idx_secundarios))
     
     #print(valores_secundarios)
 
