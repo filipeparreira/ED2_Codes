@@ -153,19 +153,8 @@ def pesquisarRegistro(chave_busca, idx_primarios, idx_secundarios):
     
     # Pesquisar na tabela de indices secundarios a chave de busca
     valores_secundarios = list()
-    #valores_secundarios = busca_binaria_composta(idx_secundarios, chave_busca, valores_secundarios)
-    
-    '''while True:
-        resultado, valor = binarySearch(idx_secundarios, chave_busca.upper())
-        if resultado != False:
-            valores_secundarios.append(valor)
-        elif resultado == False:
-            break'''
-
     valores_secundarios = list(filter(lambda x:chave_busca.upper() in x[1], idx_secundarios))
     
-    #print(valores_secundarios)
-
     if len(valores_secundarios) > 0:
         valores_RRN = list()
         for valor in valores_secundarios:
