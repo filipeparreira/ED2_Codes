@@ -26,13 +26,11 @@ def armazena(professores, lista_profs, tam):
     count = 1
     while count < tam:
         conteudo = linhas[count].split('|')
-        if len(conteudo) == 7:        
+        if len(conteudo) == 5:        
             professores['ci'] = conteudo[0]
             professores['nome'] = conteudo[1]
-            professores['sexo'] = conteudo[2]
-            professores['idade'] = conteudo[3]
-            professores['area'] = conteudo[4]
-            professores['tel'] = conteudo[5]
+            professores['curso'] = conteudo[2]
+            professores['cidade'] = conteudo[3]
             
             #Amazena o dicionario 'professores' em uma lista,
             #gerando assim, uma lista de dicionarios
@@ -58,12 +56,10 @@ def imprime(arquivo, lista_profs, lista_top):
 
     #Imprimindo a lista
     for count in range(0, tam):
-        arq_out.write('{:3}|'.format(lista_profs[count]['ci'][:3]))
-        arq_out.write('{:30}|'.format(lista_profs[count]['nome'][:30]))
-        arq_out.write('{:1}|'.format(lista_profs[count]['sexo'][0]))
-        arq_out.write('{:2}|'.format(lista_profs[count]['idade'][:2]))
-        arq_out.write('{:30}|'.format(lista_profs[count]['area'][:30]))
-        arq_out.write('{:14}|\n'.format(str(lista_profs[count]['tel']).replace('\n', ' ')[0:14]))
+        arq_out.write('{:3}|'.format(lista_profs[count]['ci'][:5]))
+        arq_out.write('{:30}|'.format(lista_profs[count]['nome'][:20]))
+        arq_out.write('{:1}|'.format(lista_profs[count]['curso'][:10]))
+        arq_out.write('{:2}|'.format(lista_profs[count]['cidade'][:20]))
 
     arq_out.close()
 
